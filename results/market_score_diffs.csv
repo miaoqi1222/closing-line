@@ -1,0 +1,9 @@
+forecaster,metric,value,ci_lo,ci_hi,n,spans_zero
+close_multiplicative - close_shin,log_loss_diff,0.000117,-0.000378,0.000578,3250,True
+close_multiplicative - close_shin,brier_diff,0.000086,-0.000167,0.000325,3250,True
+close_additive - close_shin,log_loss_diff,0.000011,-0.000159,0.000195,3250,True
+close_additive - close_shin,brier_diff,-0.000008,-0.000089,0.000079,3250,True
+open_shin - close_shin,log_loss_diff,0.003759,0.001196,0.006107,3250,False
+open_shin - close_shin,brier_diff,0.002640,0.000955,0.004176,3250,False
+base_rate - close_shin,log_loss_diff,0.118068,0.101882,0.133257,3250,False
+base_rate - close_shin,brier_diff,0.084434,0.073371,0.094766,3250,False

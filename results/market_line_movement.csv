@@ -1,0 +1,4 @@
+outcome,n,mean_log_move,mean_abs_log_move,p95_abs_log_move,mean_abs_prob_move,share_unchanged
+home,3250,-0.008793,0.056842,0.162559,0.020824,0.041231
+draw,3250,0.002145,0.044704,0.131198,0.009977,0.024923
+away,3250,-0.005417,0.072170,0.199298,0.018933,0.021538
