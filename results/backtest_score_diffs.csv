@@ -1,0 +1,5 @@
+forecaster,metric,value,ci_lo,ci_hi,n,spans_zero
+elo - close,log_loss_diff,0.024280,0.016216,0.032004,2660,False
+elo - close,brier_diff,0.017033,0.011608,0.022309,2660,False
+base_rate - close,log_loss_diff,0.106875,0.090379,0.122725,2660,False
+base_rate - close,brier_diff,0.076760,0.065376,0.087628,2660,False

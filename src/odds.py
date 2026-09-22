@@ -108,6 +108,8 @@ def consensus_probabilities(
 ) -> tuple[np.ndarray, np.ndarray]:
     """Mean of devigged probabilities across the books priced for each match; ``(P, n_books)``."""
     books = books_with_stage(df, stage) if books is None else books
+    if not books:
+        return np.full((len(df), 3), np.nan), np.zeros(len(df), dtype=int)
     stack = np.stack([book_probabilities(df, b, stage, method) for b in books])
     n_books = np.isfinite(stack[:, :, 0]).sum(axis=0)
     with np.errstate(invalid="ignore"):

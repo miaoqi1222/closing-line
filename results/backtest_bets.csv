@@ -1,0 +1,9 @@
+forecaster,metric,value,ci_lo,ci_hi,n,spans_zero
+elo,n_bets,2339.000000,,,2339,False
+elo,clv_mean,-0.003843,-0.007649,0.000020,2339,True
+elo,ev_at_close_mean,-0.038544,-0.042310,-0.034872,2339,False
+elo,hit_rate,0.364686,0.345864,0.383497,2339,False
+elo,roi_flat,0.005306,-0.066958,0.080271,2339,True
+elo,roi_kelly,-0.007888,-0.074628,0.058235,2339,True
+elo,pnl_flat_total,0.124100,,,2339,False
+elo,pnl_kelly_total,-0.257905,,,2339,False
