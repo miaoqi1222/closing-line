@@ -44,8 +44,6 @@ Per-season detail with percentiles: `odds_overround.csv`.
 | vc | multiplicative vs additive | 1900 | 0.0086 | 0.0043 | 0.0073 | 0.0441 | 0.0101 | 0.0062 |
 | vc | additive vs shin | 1900 | 0.0022 | 0.0011 | 0.0019 | 0.0115 | 0.0026 | 0.0017 |
 
-Additive method needed flooring on 0 of 3630 Pinnacle closing rows.
-
 ## Shin minus multiplicative, Pinnacle closing, by favourite strength
 
 | fav_bin | n | shin_minus_mult_favourite | shin_minus_mult_longshot |
