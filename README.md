@@ -34,7 +34,7 @@ Each forecast is a probability vector `p = (p_H, p_D, p_A)` and the outcome is o
 log_loss = -ln(p_y)        where p_y is the probability given to the outcome that happened
 ```
 
-Only the probability placed on the realised outcome matters. The penalty is unbounded as `p_y -> 0`, so a confident wrong forecast is punished hard; probabilities are clipped at 1e-12 before taking the log. It is the negative log likelihood, so the mean over matches is the per-match cross-entropy and the difference between two forecasters is a log likelihood ratio per match. Reference points on this data: a uniform forecast scores `ln 3 = 1.099`, the base-rate prior 1.071, the closing line 0.964. The 0.024 gap between Elo and the close means the market's likelihood is `exp(0.024) = 2.5%` higher per match, which compounds to a factor of about `exp(0.024 * 2660) = 10^28` over the test set.
+Only the probability placed on the realised outcome matters. The penalty is unbounded as `p_y -> 0`, so a confident wrong forecast is punished hard; probabilities are clipped at 1e-12 before taking the log. It is the negative log likelihood, so the mean over matches is the per-match cross-entropy and the difference between two forecasters is a log likelihood ratio per match. Reference points on this data: a uniform forecast scores `ln 3 = 1.099`, the base-rate prior 1.071, the closing line 0.964. The 0.024 gap between Elo and the close means the market's likelihood is `exp(0.024) - 1 = 2.4%` higher per match, which compounds to a factor of about `exp(0.024 * 2660) = 5 x 10^27` over the test set.
 
 **Brier score** (multiclass, Brier 1950):
 
