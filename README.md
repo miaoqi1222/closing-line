@@ -21,7 +21,34 @@ python scripts/run_backtest.py && python scripts/make_figures.py
 * **Devig.** Shin (1993) by default. It has a model behind it and sits between the multiplicative and additive answers. On Pinnacle closing prices the three methods differ by 0.1 to 0.5 probability points on average and up to 2.4 points at the extremes; the disagreement grows with favourite strength (`results/odds_devig_by_favourite.csv`). Log loss of the benchmark is statistically identical under all three.
 * **Split.** Expanding window, one season at a time. For test season *i* the model's three hyperparameters are fitted on seasons 1 to *i* - 1, then it predicts season *i* in date order, updating ratings on each result after predicting it. No refitting on future data. A test asserts that altering later results leaves earlier predictions bit-identical.
 * **Bets.** At most one per match: the outcome with the largest expected value at Pinnacle's pre-closing price, if positive. Settled at that price, vig included. Flat stakes of 1% of a constant bankroll, or quarter Kelly capped at 2%, no compounding.
+* **Scoring rules.** Two strictly proper scoring rules, computed per match and averaged. A scoring rule is proper when the forecaster minimises its expected score by reporting their true belief, and strictly proper when that is the only way to minimise it. Hit rate is not proper (it rewards rounding every forecast to the favourite); ROI is not proper either and is dominated by noise. See below.
 * **Intervals.** 95% percentile bootstrap over matches, 2000 replicates, seed 0. Every script is deterministic and re-running reproduces the CSVs byte for byte.
+
+### Scoring rules in detail
+
+Each forecast is a probability vector `p = (p_H, p_D, p_A)` and the outcome is one of the three. Write `o` for the one-hot vector of the outcome.
+
+**Log loss** (logarithmic score, natural log):
+
+```
+log_loss = -ln(p_y)        where p_y is the probability given to the outcome that happened
+```
+
+Only the probability placed on the realised outcome matters. The penalty is unbounded as `p_y -> 0`, so a confident wrong forecast is punished hard; probabilities are clipped at 1e-12 before taking the log. It is the negative log likelihood, so the mean over matches is the per-match cross-entropy and the difference between two forecasters is a log likelihood ratio per match. Reference points on this data: a uniform forecast scores `ln 3 = 1.099`, the base-rate prior 1.071, the closing line 0.964. The 0.024 gap between Elo and the close means the market's likelihood is `exp(0.024) = 2.5%` higher per match, which compounds to a factor of about `exp(0.024 * 2660) = 10^28` over the test set.
+
+**Brier score** (multiclass, Brier 1950):
+
+```
+brier = sum over k in {H, D, A} of (p_k - o_k)^2
+```
+
+Range 0 to 2 (0 for a certain and correct forecast, 2 for a certain and wrong one). Unlike log loss it looks at the whole vector, is bounded, and penalises a confident miss less severely. A uniform forecast scores `2/3 = 0.667`; the base rate 0.649; the closing line 0.572. The Brier score decomposes into reliability (calibration) minus resolution (discrimination) plus the outcome entropy, which is why we report calibration separately: two forecasters can tie on Brier with one well-calibrated and one sharp but biased.
+
+**Why both.** They rank forecasters the same way here, and the paired-difference intervals agree. Where they would disagree is in the tails: log loss cares about not being confidently wrong, Brier about overall closeness. Reporting both guards against a result that depends on the choice of rule.
+
+**How they are compared.** Never in isolation. The headline number is the *paired difference* on identical matches, `score_model - score_close`, with a bootstrap interval over matches. A difference whose interval spans zero is reported as such. Per-season scores use the same rule so that one unusual season (2020-21, closed stadiums) is visible rather than averaged away.
+
+**Not implemented.** The ranked probability score, which respects the ordering home > draw > away and penalises a home forecast less when the draw happens than when the away win does. It is the natural proper rule for ordered 1X2 outcomes and is on the roadmap.
 
 ## 3. Headline
 
@@ -84,5 +111,6 @@ _To fill in: the shape of the CLV distribution, why EV-at-close is negative whil
 * Dixon-Coles and bivariate Poisson behind the same `fit` / `predict` interface.
 * Promotion handling and between-season regression to the mean for Elo.
 * Add 2015-16 (Pinnacle prices exist) and a second league.
+* Ranked probability score as a third proper scoring rule.
 * Sensitivity of CLV to a minimum-edge threshold instead of betting every positive-EV side.
 * A model that combines Elo with the pre-closing price, to test whether any information survives the market.
